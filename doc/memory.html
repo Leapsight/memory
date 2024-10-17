@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module memory</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module memory</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This module provides utilities for working with memory size units in  
+both decimal (SI) and binary (IEC) formats.
+
+
+<h2><a name="description">Description</a></h2><p>This module provides utilities for working with memory size units in  
+both decimal (SI) and binary (IEC) formats.  
+It allows conversions between different units of measurement such as bytes,  
+kilobytes, megabytes, and their binary counterparts (kibibytes, mebibytes,  
+etc.), and formatting memory sizes in human-readable strings.</p>
+ 
+  <p>The main functionalities include:</p>
+ 
+   <p>- Converting between units (e.g., kilobytes to bytes, mebibytes to bytes)   
+- Formatting a memory size into human-readable strings in either decimal or   
+binary units   
+- Providing an easy API for common memory unit conversions</p>
+ 
+   <p>The module supports both decimal and binary units:</p>
+ 
+   - **Decimal units**: byte, kilobyte, megabyte, gigabyte, terabyte
+   - **Binary units**: byte, kibibyte, mebibyte, gibibyte, tebibyte
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-binary_unit">binary_unit()</a></h3>
+<p><code>binary_unit() = byte | kibibyte | mebibyte | gibibyte | tebibyte</code></p>
+
+
+<h3 class="typedecl"><a name="type-decimal_unit">decimal_unit()</a></h3>
+<p><code>decimal_unit() = byte | kilobyte | megabyte | gigabyte | terabyte</code></p>
+
+
+<h3 class="typedecl"><a name="type-unit">unit()</a></h3>
+<p><code>unit() = <a href="#type-decimal_unit">decimal_unit()</a> | <a href="#type-binary_unit">binary_unit()</a></code></p>
+
+
+<h3 class="typedecl"><a name="type-unit_type">unit_type()</a></h3>
+<p><code>unit_type() = decimal | binary</code></p>
+
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#bytes-1">bytes/1</a></td><td>Returns the number of bytes in <code>N</code>.</td></tr>
+<tr><td valign="top"><a href="#convert-3">convert/3</a></td><td>Convert <code>Value</code> from unit <code>FromUnit</code> to unit <code>ToUnit</code>.</td></tr>
+<tr><td valign="top"><a href="#format-2">format/2</a></td><td>Returns a string representation of <code>Bytes</code> in the selected unit type.</td></tr>
+<tr><td valign="top"><a href="#gibibytes-1">gibibytes/1</a></td><td>Converts gibibytes into bytes.</td></tr>
+<tr><td valign="top"><a href="#gigabytes-1">gigabytes/1</a></td><td>Converts gigabytes into bytes.</td></tr>
+<tr><td valign="top"><a href="#kibibytes-1">kibibytes/1</a></td><td>Converts kibibytes into bytes.</td></tr>
+<tr><td valign="top"><a href="#kilobytes-1">kilobytes/1</a></td><td>Converts kilobytes into bytes.</td></tr>
+<tr><td valign="top"><a href="#mebibytes-1">mebibytes/1</a></td><td>Converts mebibytes into bytes.</td></tr>
+<tr><td valign="top"><a href="#megabytes-1">megabytes/1</a></td><td>Converts megabytes into bytes.</td></tr>
+<tr><td valign="top"><a href="#tebibytes-1">tebibytes/1</a></td><td>Converts tebibytes into bytes.</td></tr>
+<tr><td valign="top"><a href="#terabytes-1">terabytes/1</a></td><td>Converts terabytes into bytes.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="bytes-1">bytes/1</a></h3>
+<div class="spec">
+<p><code>bytes(N::non_neg_integer()) -&gt; non_neg_integer()</code><br></p>
+<p> </p>
+</div><p>Returns the number of bytes in <code>N</code>.
+  This function handles the simplest case where <code>N</code> is already in bytes.</p>
+
+<h3 class="function"><a name="convert-3">convert/3</a></h3>
+<div class="spec">
+<p><code>convert(Value::number(), FromUnit::<a href="#type-unit">unit()</a>, ToUnit::<a href="#type-unit">unit()</a>) -&gt; number()</code><br></p>
+<p> </p>
+</div><p>Convert <code>Value</code> from unit <code>FromUnit</code> to unit <code>ToUnit</code>.
+  Takes a numeric value and converts it from one unit of measurement to
+  another, calculating the number of bytes and then converting it back into the
+  desired unit.</p>
+
+<h3 class="function"><a name="format-2">format/2</a></h3>
+<div class="spec">
+<p><code>format(Bytes::non_neg_integer(), X2::<a href="#type-unit_type">unit_type()</a>) -&gt; number()</code><br></p>
+<p> </p>
+</div><p>Returns a string representation of <code>Bytes</code> in the selected unit type.
+  The unit type can be either <code>decimal</code> or <code>binary</code>.</p>
+
+<h3 class="function"><a name="gibibytes-1">gibibytes/1</a></h3>
+<div class="spec">
+<p><code>gibibytes(N::number()) -&gt; non_neg_integer()</code><br></p>
+<p> </p>
+</div><p>Converts gibibytes into bytes.
+  Returns the number of bytes in <code>N</code> gibibytes.</p>
+
+<h3 class="function"><a name="gigabytes-1">gigabytes/1</a></h3>
+<div class="spec">
+<p><code>gigabytes(N::number()) -&gt; non_neg_integer()</code><br></p>
+<p> </p>
+</div><p>Converts gigabytes into bytes.
+  Returns the number of bytes in <code>N</code> gigabytes.</p>
+
+<h3 class="function"><a name="kibibytes-1">kibibytes/1</a></h3>
+<div class="spec">
+<p><code>kibibytes(N::number()) -&gt; non_neg_integer()</code><br></p>
+<p> </p>
+</div><p>Converts kibibytes into bytes.
+  Returns the number of bytes in <code>N</code> kibibytes.</p>
+
+<h3 class="function"><a name="kilobytes-1">kilobytes/1</a></h3>
+<div class="spec">
+<p><code>kilobytes(N::number()) -&gt; non_neg_integer()</code><br></p>
+<p> </p>
+</div><p>Converts kilobytes into bytes.
+  Returns the number of bytes in <code>N</code> kilobytes.</p>
+
+<h3 class="function"><a name="mebibytes-1">mebibytes/1</a></h3>
+<div class="spec">
+<p><code>mebibytes(N::number()) -&gt; non_neg_integer()</code><br></p>
+<p> </p>
+</div><p>Converts mebibytes into bytes.
+  Returns the number of bytes in <code>N</code> mebibytes.</p>
+
+<h3 class="function"><a name="megabytes-1">megabytes/1</a></h3>
+<div class="spec">
+<p><code>megabytes(N::number()) -&gt; non_neg_integer()</code><br></p>
+<p> </p>
+</div><p>Converts megabytes into bytes.
+  Returns the number of bytes in <code>N</code> megabytes.</p>
+
+<h3 class="function"><a name="tebibytes-1">tebibytes/1</a></h3>
+<div class="spec">
+<p><code>tebibytes(N::number()) -&gt; non_neg_integer()</code><br></p>
+<p> </p>
+</div><p>Converts tebibytes into bytes.
+  Returns the number of bytes in <code>N</code> tebibytes.</p>
+
+<h3 class="function"><a name="terabytes-1">terabytes/1</a></h3>
+<div class="spec">
+<p><code>terabytes(N::number()) -&gt; non_neg_integer()</code><br></p>
+<p> </p>
+</div><p>Converts terabytes into bytes.
+  Returns the number of bytes in <code>N</code> terabytes.</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc</i></p>
+</body>
+</html>
