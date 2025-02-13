@@ -53,6 +53,7 @@
 -export([bytes/1]).
 -export([convert/3]).
 -export([format/2]).
+-export([words/1]).
 -export([gibibytes/1]).
 -export([gigabytes/1]).
 -export([kibibytes/1]).
@@ -79,6 +80,17 @@
 
 bytes(N) when is_integer(N), N >= 0 ->
     N.
+
+
+%% -----------------------------------------------------------------------------
+%% @doc Converts words into bytes.
+%% Returns the number of bytes in `N' kilobytes.
+%% @end
+%% -----------------------------------------------------------------------------
+-spec words(non_neg_integer()) -> non_neg_integer().
+
+words(N) when is_integer(N), N >= 0 ->
+    trunc(N * erlang:system_info(wordsize)).
 
 
 %% -----------------------------------------------------------------------------
