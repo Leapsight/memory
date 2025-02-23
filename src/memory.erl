@@ -49,10 +49,14 @@
                             | mebibyte
                             | gibibyte
                             | tebibyte.
+-type format_opt()      ::  {return, iodata| string | binary}.
+-type format_opts()     ::  [format_opt()]
+                            | #{return => iodata | string | binary}.
 
 -export([bytes/1]).
 -export([convert/3]).
 -export([format/2]).
+-export([format/3]).
 -export([words/1]).
 -export([gibibytes/1]).
 -export([gigabytes/1]).
@@ -198,42 +202,62 @@ convert(Value, FromUnit, ToUnit) when is_number(Value), Value >= 0 ->
 %% The unit type can be either `decimal' or `binary'.
 %% @end
 %% -----------------------------------------------------------------------------
--spec format(non_neg_integer(), unit_type()) -> number().
+-spec format(non_neg_integer(), unit_type()) -> string().
 
-format(Bytes, decimal) when is_number(Bytes), Bytes >= 0 ->
+format(Bytes, Unit) ->
+    format(Bytes, Unit, #{return => iodata}).
+
+
+-spec format(non_neg_integer(), unit_type(), format_opts()) ->
+    string() | binary().
+
+format(Bytes, Unit, Opts) when is_list(Opts) ->
+    format(Bytes, Unit, maps:from_list(Opts));
+
+format(Bytes, decimal, Opts) when is_number(Bytes), Bytes >= 0, is_map(Opts) ->
     case Bytes of
         _ when Bytes >= 1000 * 1000 * 1000 * 1000 ->
-            io_lib:format("~p TB", [Bytes / (1000 * 1000 * 1000 * 1000)]);
+            Str = io_lib:format("~p TB", [Bytes / (1000 * 1000 * 1000 * 1000)]),
+            do_format(Str, Opts);
 
         _ when Bytes >= 1000 * 1000 * 1000 ->
-            io_lib:format("~p GB", [Bytes / (1000 * 1000 * 1000)]);
+            Str = io_lib:format("~p GB", [Bytes / (1000 * 1000 * 1000)]),
+            do_format(Str, Opts);
 
         _ when Bytes >= 1000 * 1000 ->
-            io_lib:format("~p MB", [Bytes / (1000 * 1000)]);
+            Str = io_lib:format("~p MB", [Bytes / (1000 * 1000)]),
+            do_format(Str, Opts);
 
         _ when Bytes >= 1000 ->
-            io_lib:format("~p KB", [Bytes / 1000]);
+            Str = io_lib:format("~p KB", [Bytes / 1000]),
+            do_format(Str, Opts);
 
         _ ->
-            io_lib:format("~p bytes", [Bytes])
+            Str = io_lib:format("~p bytes", [Bytes]),
+            do_format(Str, Opts)
     end;
 
-format(Bytes, binary) when is_number(Bytes), Bytes >= 0 ->
+format(Bytes, binary, Opts) when is_number(Bytes), Bytes >= 0, is_map(Opts) ->
     case Bytes of
         _ when Bytes >= 1024 * 1024 * 1024 * 1024 ->
-            io_lib:format("~p TiB", [Bytes / (1024 * 1024 * 1024 * 1024)]);
+            Str = io_lib:format("~p TiB", [Bytes / (1024 * 1024 * 1024 * 1024)]),
+            do_format(Str, Opts);
 
         _ when Bytes >= 1024 * 1024 * 1024 ->
-            io_lib:format("~p GiB", [Bytes / (1024 * 1024 * 1024)]);
+            Str = io_lib:format("~p GiB", [Bytes / (1024 * 1024 * 1024)]),
+            do_format(Str, Opts);
 
         _ when Bytes >= 1024 * 1024 ->
-            io_lib:format("~p MiB", [Bytes / (1024 * 1024)]);
+            Str = io_lib:format("~p MiB", [Bytes / (1024 * 1024)]),
+            do_format(Str, Opts);
 
         _ when Bytes >= 1024 ->
-            io_lib:format("~p KiB", [Bytes / 1024]);
+            Str = io_lib:format("~p KiB", [Bytes / 1024]),
+            do_format(Str, Opts);
 
         _ ->
-            io_lib:format("~p bytes", [Bytes])
+            Str = io_lib:format("~p bytes", [Bytes]),
+            do_format(Str, Opts)
     end.
 
 
@@ -266,3 +290,14 @@ from_bytes(Bytes, kibibyte)  -> Bytes / 1024;
 from_bytes(Bytes, mebibyte)  -> Bytes / (1024 * 1024);
 from_bytes(Bytes, gibibyte)  -> Bytes / (1024 * 1024 * 1024);
 from_bytes(Bytes, tebibyte)  -> Bytes / (1024 * 1024 * 1024 * 1024).
+
+
+do_format(Str, #{return := binary}) ->
+    iolist_to_binary(Str);
+
+do_format(Str, #{return := string}) ->
+    lists:flatten(Str);
+
+do_format(Str, _) ->
+    %% Default is iodata
+    Str.
